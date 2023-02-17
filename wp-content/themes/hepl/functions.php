@@ -6,9 +6,10 @@ add_filter('use_block_editor_for_post', '__return_false', 10);
 // Register existing navigation menus
 register_nav_menu('main', 'Navigation principale du site web (en-tête)');
 register_nav_menu('footer', 'Navigation de pied de page');
+register_nav_menu('social-media', 'Liens vers les réseaux sociaux');
 
 // Custom function that returns a menu structure for given location
-function hepl_get_menu(string $location): array
+function hepl_get_menu(string $location, ?array $attributes = []): array
 {
     // 1. Récupérer les liens en base de données pour la location $location
     $locations = get_nav_menu_locations();
@@ -24,6 +25,10 @@ function hepl_get_menu(string $location): array
         $link = new stdClass();
         $link->href = $item->url;
         $link->label = $item->title;
+
+        foreach($attributes as $attribute) {
+            $link->$attribute = get_field($attribute, $item->ID);
+        }
 
         $links[] = $link;
     }

@@ -17,3 +17,8 @@
             </a>
         <?php endforeach; ?>
     </nav>
+    <div class="socialmedia">
+        <?php foreach(hepl_get_menu('social-media', ['icon']) as $network): ?>
+            <a href="<?= $network->href; ?>" class="socialmedia__network socialmedia__network--<?= $network->icon; ?>"><?= $network->label; ?></a>
+        <?php endforeach; ?>
+    </div>
