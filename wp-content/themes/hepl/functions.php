@@ -36,3 +36,24 @@ function hepl_get_menu(string $location, ?array $attributes = []): array
     // 3. Retourner l'ensemble des liens formatés en un seul tableau non-associatif
     return $links;
 }
+
+// Activer les images "thumbnail" sur nos posts
+add_theme_support('post-thumbnails'); 
+add_image_size('animal_thumbnail', 400, 400, true);
+
+// Enregistrer un custom post type :
+function hepl_register_custom_post_types()
+{
+    register_post_type('animal', [
+        'label' => 'Animaux',
+        'description' => 'Les animaux disponibles dans notre refuge.',
+        'public' => true,
+        'menu_position' => 20,
+        'menu_icon' => 'dashicons-pets', // https://developer.wordpress.org/resource/dashicons/#pets,
+        'supports' => ['title','thumbnail'],
+    ]);
+}
+
+add_action('init', 'hepl_register_custom_post_types');
+
+
