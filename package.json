@@ -1,0 +1,29 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "npm run development",
+        "development": "mix",
+        "watch": "mix watch",
+        "watch-poll": "mix watch -- --watch-options-poll=1000",
+        "hot": "mix watch --hot",
+        "prod": "npm run production",
+        "production": "mix --production",
+        "icons": "BUILD_ICONS=true yarn dev",
+        "watch-icons": "BUILD_ICONS=true yarn watch"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.0.0",
+        "@babel/plugin-proposal-class-properties": "^7.8.3",
+        "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
+        "browser-sync": "^2.26.7",
+        "browser-sync-webpack-plugin": "^2.0.1",
+        "fontellizr": "voidgraphics/fontellizr",
+        "laravel-mix": "^6.0.6",
+        "mix-white-sass-icons": "^0.2.0",
+        "postcss": "^8.1.14",
+        "resolve-url-loader": "^5.0.0",
+        "sass": "^1.27",
+        "sass-loader": "^8.0"
+    },
+    "dependencies": {}
+}
