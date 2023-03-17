@@ -56,4 +56,23 @@ function hepl_register_custom_post_types()
 
 add_action('init', 'hepl_register_custom_post_types');
 
+// Charger les traductions existantes
+load_theme_textdomain('hepl', get_template_directory() . '/locales');
+
+// Ajouter le système personnalisé de remplacement des variables dans les phrases traduisibles
+// ex: $replacements = ['name' => 'Jean-Paul']
+function __hepl(string $translation, array $replacements = [])
+{
+    // 1. Récupérer la traduction de la phrase présente dans $translation
+    $base = __($translation, 'hepl');
+
+    // 2. Remplacer toutes les occurrences des variables par leur valeur
+    foreach ($replacements as $key => $value) {
+        $variable = ':' . $key;
+        $base = str_replace($variable, $value, $base);
+    }
+
+    // 3. Retourner la traduction complète.
+    return $base;
+}
 

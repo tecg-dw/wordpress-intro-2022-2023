@@ -2,14 +2,14 @@
 <?php if(have_posts()): while(have_posts()): the_post(); ?>
     <div class="hero">
         <h2 class="hero__title"><?= get_the_title(); ?></h2>
-        <p>Scrollez pour découvrir mon site</p>
+        <p><?= __hepl('Scrollez pour découvrir mon site'); ?></p>
     </div>
     <main class="page">
         <div class="page__content">
             <?php the_content(); ?>
         </div>
         <section class="page__animals animals">
-            <h2 class="animals__title">Nos derniers pensionnaires</h2>
+            <h2 class="animals__title"><?= __hepl('Nos derniers pensionnaires'); ?></h2>
             <div class="animals__container">
                 <?php 
                 // Faire une requête en DB pour récupérer 4 animaux
@@ -22,18 +22,18 @@
                 ?>
                 <article class="animal">
                     <a href="<?= get_the_permalink(); ?>" class="animal__link">
-                        <span class="sro">Découvrir <?= get_the_title(); ?></span>
+                        <span class="sro"><?= __hepl('Découvrir :name', ['name' => get_the_title()]); ?></span>
                     </a>
                     <div class="animal__card">
                         <div class="animal__details">
                             <h3 class="animal__name"><?= get_the_title(); ?></h3>
                             <dl class="animal__attributes">
-                                <dt class="sro">Espèce</dt>
-                                <dd class="animal__attribute"><?= get_field('species'); ?></dd>
-                                <dt class="sro">Âge</dt>
+                                <dt class="sro"><?= __hepl('Espèce'); ?></dt>
+                                <dd class="animal__attribute"><?= __hepl(get_field('species')); ?></dd>
+                                <dt class="sro"><?= __hepl('Âge'); ?></dt>
                                 <dd class="animal__attribute"><?= get_field('age'); ?></dd>
-                                <dt class="sro">Sexe</dt>
-                                <dd class="animal__attribute"><?= get_field('gender'); ?></dd>
+                                <dt class="sro"><?= __hepl('Sexe'); ?></dt>
+                                <dd class="animal__attribute"><?= __hepl(get_field('gender')); ?></dd>
                             </dl>
                         </div>
                         <figure class="animal__fig">
@@ -42,7 +42,7 @@
                     </div>
                 </article>
                 <?php endwhile; else: ?>
-                <p class="animals__empty">Nous n'avons pas d'animaux pour le moment.</p>
+                <p class="animals__empty"><?= __hepl('Nous n\'avons pas d\'animaux pour le moment.'); ?></p>
                 <?php endif; ?>
             </div>
         </section>
