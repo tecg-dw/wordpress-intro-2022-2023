@@ -18,6 +18,15 @@
             </a>
         <?php endforeach; ?>
     </nav>
+    <div class="languages">
+        <ul class="languages__container">
+            <?php foreach(pll_the_languages(['raw' => true]) as $lang): ?>
+            <li class="languages__item<?= $lang['current_lang'] ? ' languages__item--current' : '' ?>">
+                <a href="<?= $lang['url'] ?>" lang="<?= $lang['locale'] ?>" hreflang="<?= $lang['locale'] ?>" class="languages__link"><?= $lang['name'] ?></a>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
     <div class="socialmedia">
         <?php foreach(hepl_get_menu('social-media', ['icon']) as $network): ?>
             <a href="<?= $network->href; ?>" class="socialmedia__network socialmedia__network--<?= $network->icon; ?>"><?= $network->label; ?></a>
