@@ -3,6 +3,7 @@
 !README.md
 !package.json
 !webpack.mix.js
+!database.sql
 
 !/wp-content
 /wp-content/*
