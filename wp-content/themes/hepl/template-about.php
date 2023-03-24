@@ -8,6 +8,9 @@
                 <?php the_content(); ?>
             </div>
         </div>
+        <div class="page__form">
+            <?= apply_filters('the_content', '[contact-form-7 id="56" title="Formulaire page de contact"]'); ?>
+        </div>
         <aside class="page__aside profile">
             <h2 class="profile__name"><?= get_field('name'); ?></h2>
             <div class="profile__description"><?= get_field('description'); ?></div>
