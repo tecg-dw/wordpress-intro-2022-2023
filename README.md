@@ -9,3 +9,4 @@ Premier cours : Vendredi 3 février 2023.
 - Advanced Custom Fields
 - Polylang
 - Regenerate Thumbnails
+- Contact Form 7 (uniquement si on ne souhaite pas créer un formulaire de contact 100% personnalisé)
