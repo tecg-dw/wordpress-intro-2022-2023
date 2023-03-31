@@ -101,33 +101,28 @@ function hepl_execute_contact_form()
         'nonce_identifier' => 'hepl_contact_form',
     ];
 
-    $form = new \Hepl\ContactForm($config, $_POST);
-
-    $form->validate([
-        'firstname' => ['required'],
-        'lastname' => ['required'],
-        'email' => ['required','email'],
-        'message' => [],
-    ]);
-
-    $form->sanitize([
-        'firstname' => 'text_field',
-        'lastname' => 'text_field',
-        'email' => 'email',
-        'message' => 'textarea_field',
-    ]);
-
-    $form->save(
-        title: fn($data) => $data['firstname'] . ' ' . $data['lastname'] . ' <' . $data['email'] . '>',
-        content: fn($data) => $data['message'],
-    );
-
-    $form->send(
-        title: fn($data) => 'Nouveau message de ' . $data['firstname'] . ' ' . $data['lastname'],
-        content: fn($data) => 'Prénom: ' . $data['firstname'] . PHP_EOL . 'Nom: ' . $data['lastname'] . PHP_EOL . 'Email: ' . $data['email'] . PHP_EOL . 'Message:' . PHP_EOL . $data['message'],
-    );
-
-    $form->feedback();
+    (new \Hepl\ContactForm($config, $_POST))
+        ->sanitize([
+            'firstname' => 'text_field',
+            'lastname' => 'text_field',
+            'email' => 'email',
+            'message' => 'textarea_field',
+        ])
+        ->validate([
+            'firstname' => ['required'],
+            'lastname' => ['required'],
+            'email' => ['required','email'],
+            'message' => [],
+        ])
+        ->save(
+            title: fn($data) => $data['firstname'] . ' ' . $data['lastname'] . ' <' . $data['email'] . '>',
+            content: fn($data) => $data['message'],
+        )
+        ->send(
+            title: fn($data) => 'Nouveau message de ' . $data['firstname'] . ' ' . $data['lastname'],
+            content: fn($data) => 'Prénom: ' . $data['firstname'] . PHP_EOL . 'Nom: ' . $data['lastname'] . PHP_EOL . 'Email: ' . $data['email'] . PHP_EOL . 'Message:' . PHP_EOL . $data['message'],
+        )
+        ->feedback();
 }
 
 add_action('admin_post_nopriv_hepl_contact_form', 'hepl_execute_contact_form');
