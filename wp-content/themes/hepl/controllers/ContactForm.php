@@ -41,8 +41,8 @@ class ContactForm
         }
 
         if($errors = $this->applyValidationRules($rules)) {
-            // La validation ne passe pas, il faut afficher une erreur à l'utilisateur.
-            wp_safe_redirect($this->referrer . '?' . http_build_query($errors));
+            hepl_session_flash($this->config['nonce_identifier'] . '_errors', $errors);
+            wp_safe_redirect($this->referrer);
             exit;
         }
     }
@@ -141,6 +141,7 @@ class ContactForm
      */
     public function feedback(): void
     {
+        hepl_session_flash($this->config['nonce_identifier'] . '_feedback', true);
         wp_safe_redirect($this->referrer);
         exit;
     }

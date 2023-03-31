@@ -1,5 +1,9 @@
 <?php
 
+// Démarrer le système de sessions pour pouvoir afficher des messages de feedback venant des formulaires.
+if(session_status() === PHP_SESSION_NONE) session_start();
+
+// Charger les fichiers des fonctionnalités extraites dans des classes.
 require_once(__DIR__ . '/controllers/ContactForm.php');
 
 // Disable Wordpress' default Gutenberg Editor:
@@ -128,3 +132,28 @@ function hepl_execute_contact_form()
 
 add_action('admin_post_nopriv_hepl_contact_form', 'hepl_execute_contact_form');
 add_action('admin_post_hepl_contact_form', 'hepl_execute_contact_form');
+
+// Travailler avec la session de PHP
+function hepl_session_flash(string $key, mixed $value)
+{
+    if(! isset($_SESSION['hepl_flash'])) {
+        $_SESSION['hepl_flash'] = [];
+    }
+
+    $_SESSION['hepl_flash'][$key] = $value;
+}
+
+function hepl_session_get(string $key)
+{
+    if(isset($_SESSION['hepl_flash']) && array_key_exists($key, $_SESSION['hepl_flash'])) {
+        // 1. Récupérer la donnée qui a été flash.
+        $value = $_SESSION['hepl_flash'][$key];
+        // 2. Supprimer la donnée de la session.
+        unset($_SESSION['hepl_flash'][$key]);
+        // 3. Retourner la donnée récupérée.
+        return $value;
+    }
+
+    // La donnée n'existait pas dans la session flash, on retourne null.
+    return null;
+}

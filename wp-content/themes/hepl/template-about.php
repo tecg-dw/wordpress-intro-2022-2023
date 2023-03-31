@@ -9,34 +9,51 @@
             </div>
         </div>
         <div class="page__form" style="margin: 5em 0; padding: 5em 0; border-top: 1px solid black; border-bottom: 1px solid black;">
+            <?php 
+            $feedback = hepl_session_get('hepl_contact_form_feedback') ?? false;
+            $errors = hepl_session_get('hepl_contact_form_errors') ?? [];
+            ?>
+
+            <?php if($feedback): ?>
+                <div class="success" style="border:green;padding:1em;color: green;">
+                    <p>Merci&nbsp;! Votre message a bien été envoyé.</p>
+                </div>
+            <?php else: ?>
+
+            <?php if($errors): ?>
+                <div class="error" style="border:red;padding:1em;color: red;">
+                    <p>Attention&nbsp;! Merci de corriger les erreurs du formulaire.</p>
+                </div>
+            <?php endif; ?>
+
             <form action="<?= esc_url(admin_url('admin-post.php')); ?>" method="POST" class="contact">
                 <fieldset class="contact__info">
                     <div class="field">
                         <label for="firstname" class="field__label">Votre prénom</label>
                         <input type="text" name="firstname" id="firstname" class="field__input" />
-                        <?php if($_GET['firstname'] ?? null): ?>
-                            <p class="field__error" style="color:red"><?= $_GET['firstname']; ?></p>
+                        <?php if($errors['firstname'] ?? null): ?>
+                            <p class="field__error" style="color:red"><?= $errors['firstname']; ?></p>
                         <?php endif; ?>
                     </div>
                     <div class="field">
                         <label for="lastname" class="field__label">Votre nom</label>
                         <input type="text" name="lastname" id="lastname" class="field__input" />
-                        <?php if($_GET['lastname'] ?? null): ?>
-                            <p class="field__error" style="color:red"><?= $_GET['lastname']; ?></p>
+                        <?php if($errors['lastname'] ?? null): ?>
+                            <p class="field__error" style="color:red"><?= $errors['lastname']; ?></p>
                         <?php endif; ?>
                     </div>
                     <div class="field">
                         <label for="email" class="field__label">Votre adresse mail</label>
                         <input type="email" name="email" id="email" class="field__input" />
-                        <?php if($_GET['email'] ?? null): ?>
-                            <p class="field__error" style="color:red"><?= $_GET['email']; ?></p>
+                        <?php if($errors['email'] ?? null): ?>
+                            <p class="field__error" style="color:red"><?= $errors['email']; ?></p>
                         <?php endif; ?>
                     </div>
                     <div class="field">
                         <label for="message" class="field__label">Votre message</label>
                         <textarea name="message" id="message" cols="30" rows="10" class="field__textarea"></textarea>
-                        <?php if($_GET['message'] ?? null): ?>
-                            <p class="field__error" style="color:red"><?= $_GET['message']; ?></p>
+                        <?php if($errors['message'] ?? null): ?>
+                            <p class="field__error" style="color:red"><?= $errors['message']; ?></p>
                         <?php endif; ?>
                     </div>
                 </fieldset>
@@ -46,6 +63,7 @@
                     <button class="contact__submit" type="submit">Envoyer</button>
                 </div>
             </form>
+            <?php endif; ?>
         </div>
         <div class="page__form">
             <?= apply_filters('the_content', '[contact-form-7 id="56" title="Formulaire page de contact"]'); ?>
