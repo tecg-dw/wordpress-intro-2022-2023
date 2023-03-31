@@ -1,5 +1,7 @@
 <?php
 
+require_once(__DIR__ . '/controllers/ContactForm.php');
+
 // Disable Wordpress' default Gutenberg Editor:
 add_filter('use_block_editor_for_post', '__return_false', 10);
 
@@ -88,63 +90,40 @@ function __hepl(string $translation, array $replacements = [])
 // Gérer le formulaire de contact "custom"
 // Inspiré de : https://wordpress.stackexchange.com/questions/319043/how-to-handle-a-custom-form-in-wordpress-to-submit-to-another-page
 
-function hepl_validate_contact_form(array $data) : bool|array
-{
-    $errors = [];
-
-    if(! strlen($data['lastname'] ?? null)) {
-        $errors['lastname'] = 'Veuillez fournir votre nom de famille.';
-    }
-
-    if(! strlen($data['email'] ?? null)) {
-        $errors['email'] = 'Veuillez fournir votre adresse mail.';
-    } else if (! filter_var($data['email'] ?? null, FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = 'Votre adresse mail n\'est pas valide.';
-    }
-
-    return $errors ?: true;
-}
-
-function hepl_store_contact_form_message($firstname, $lastname, $email, $message)
-{
-    wp_insert_post([
-        'post_type' => 'message',
-        'post_status' => 'publish',
-        'post_title' => $firstname . ' ' . $lastname . ' <' . $email . '>',
-        'post_content' => $message,
-    ]);
-}
-
-function hepl_send_contact_form_message($firstname, $lastname, $email, $message)
-{
-    wp_mail('toon@whitecube.be', $firstname . ' ' . $lastname . ' <' . $email . '>', $message);
-}
-
 function hepl_execute_contact_form()
 {
-    $previous = wp_get_referer();
+    $config = [
+        'nonce_field' => 'contact_nonce',
+        'nonce_identifier' => 'hepl_contact_form',
+    ];
 
-    if(wp_verify_nonce($_POST['contact_nonce'] ?? null, 'hepl_contact_form') !== 1) {
-        // C'est pas bon, on ne continue pas l'exécution du script.
-        return;
-    }
+    $form = new \Hepl\ContactForm($config, $_POST);
 
-    if(is_array($errors = hepl_validate_contact_form($_POST))) {
-        // La validation ne passe pas, il faut afficher une erreur à l'utilisateur.
-        wp_safe_redirect($previous . '?' . http_build_query($errors));
-        exit;
-    }
+    $form->validate([
+        'firstname' => ['required'],
+        'lastname' => ['required'],
+        'email' => ['required','email'],
+        'message' => [],
+    ]);
 
-    $firstname = sanitize_text_field($_POST['firstname'] ?? '');
-    $lastname = sanitize_text_field($_POST['lastname'] ?? '');
-    $email = sanitize_email($_POST['email'] ?? '');
-    $message = sanitize_textarea_field($_POST['message'] ?? '');
+    $form->sanitize([
+        'firstname' => 'text_field',
+        'lastname' => 'text_field',
+        'email' => 'email',
+        'message' => 'textarea_field',
+    ]);
 
-    hepl_store_contact_form_message($firstname, $lastname, $email, $message);
-    hepl_send_contact_form_message($firstname, $lastname, $email, $message);
+    $form->save(
+        title: fn($data) => $data['firstname'] . ' ' . $data['lastname'] . ' <' . $data['email'] . '>',
+        content: fn($data) => $data['message'],
+    );
 
-    wp_safe_redirect($previous);
-    exit;
+    $form->send(
+        title: fn($data) => 'Nouveau message de ' . $data['firstname'] . ' ' . $data['lastname'],
+        content: fn($data) => 'Prénom: ' . $data['firstname'] . PHP_EOL . 'Nom: ' . $data['lastname'] . PHP_EOL . 'Email: ' . $data['email'] . PHP_EOL . 'Message:' . PHP_EOL . $data['message'],
+    );
+
+    $form->feedback();
 }
 
 add_action('admin_post_nopriv_hepl_contact_form', 'hepl_execute_contact_form');
