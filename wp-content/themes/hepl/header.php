@@ -32,3 +32,8 @@
             <a href="<?= $network->href; ?>" class="socialmedia__network socialmedia__network--<?= $network->icon; ?>"><?= $network->label; ?></a>
         <?php endforeach; ?>
     </div>
+    <form action="<?= get_home_url(); ?>" method="get">
+        <label for="search">Votre recherche&nbsp;:</label>
+        <input type="search" name="s" id="search" value="<?= get_search_query(); ?>" />
+        <button type="submit">Rechercher</button>
+    </form>
