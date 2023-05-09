@@ -71,6 +71,23 @@ function hepl_register_custom_post_types()
 
 add_action('init', 'hepl_register_custom_post_types');
 
+// Enregistrer une "taxonomie" (façon de classer/catégoriser) pour notre post-type
+
+function hepl_register_custom_taxonomies()
+{
+    register_taxonomy('species', ['animal'], [
+        'labels' => [
+            'name' => 'Espèces',
+            'singular_name' => 'Espèce',
+        ],
+        'description' => 'Catégorisation des espèces animales.',
+        'public' => true,
+        'hierarchical' => true,
+    ]);
+}
+
+add_action('init', 'hepl_register_custom_taxonomies');
+
 // Charger les traductions existantes
 load_theme_textdomain('hepl', get_template_directory() . '/locales');
 
